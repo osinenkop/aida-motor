@@ -4,7 +4,7 @@
   <name>lk_tech</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="sinamoghimi73@gmal.com">aida</maintainer>
+  <maintainer email="sinamoghimi73@gmail.com">aida</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
