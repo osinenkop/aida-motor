@@ -19,7 +19,7 @@ auto Base::initStateCmd() -> void{
 }
 
 
-auto Base::readTemperatureVoltage() -> void{
+auto Base::getTemperatureVoltage() -> void{
     /*This command reads the current motor's temperature, voltage, and error status flags.*/
 
     this -> client_.send(this -> data_.read_temperature_and_voltage_cmd_);
@@ -80,7 +80,7 @@ auto Base::cleanError() -> void{
 
 
 
-auto Base::readTorqueSpeedPose() -> void{
+auto Base::getTorqueSpeedPose() -> void{
     /*This command reads the current motor temperature, torque, speed, encoder position.*/
 
     this -> client_.send(this -> data_.read_temperature_and_torque_speed_pose_cmd_);
@@ -114,7 +114,7 @@ auto Base::readTorqueSpeedPose() -> void{
 }
 
 
-auto Base::readPhaseCurrent() -> void{
+auto Base::getPhaseCurrent() -> void{
     /*This command reads the current motor temperature and phase current data.*/
 
     this -> client_.send(this -> data_.read_temperature_and_phase_current_cmd_);
@@ -127,6 +127,7 @@ auto Base::readPhaseCurrent() -> void{
     4. Phase C current data, data type int16_t, corresponding to the actual phase current 1A/64LSB.*/
 
     this -> temperature     =   this -> data_.read_temperature_and_phase_current_response_[5];
+
     this -> phase_a_current =   (
                                 (this -> data_.read_temperature_and_phase_current_response_[6]       )     +
                                 (this -> data_.read_temperature_and_phase_current_response_[7] << 8  )

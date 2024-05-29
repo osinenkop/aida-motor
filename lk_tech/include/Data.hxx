@@ -7,7 +7,6 @@
 
 struct Data{
 
-    
     std::vector<std::uint8_t> model_cmd_;
     std::vector<std::uint8_t> model_response_;
 
@@ -35,7 +34,6 @@ struct Data{
     std::vector<std::uint8_t> read_single_turn_cmd_;
     std::vector<std::uint8_t> read_single_turn_response_;
     
-
     std::vector<std::uint8_t> read_temperature_and_voltage_cmd_;
     std::vector<std::uint8_t> read_temperature_and_voltage_response_;
 
@@ -54,8 +52,14 @@ struct Data{
     std::vector<std::uint8_t> stop_cmd_;
     std::vector<std::uint8_t> stop_response_;
 
-    std::vector<std::uint8_t> operate_cmd_;
-    std::vector<std::uint8_t> operate_response_;
+    std::vector<std::uint8_t> turn_on_cmd_;
+    std::vector<std::uint8_t> turn_on_response_;
+
+    std::vector<std::uint8_t> open_loop_torque_cmd_;
+    std::vector<std::uint8_t> open_loop_torque_response_;
+
+    std::vector<std::uint8_t> closed_loop_torque_cmd_;
+    std::vector<std::uint8_t> closed_loop_torque_response_;
     
 };
 

@@ -1,6 +1,5 @@
 #include "PortHandler.hxx"
 
-// #include <boost/algorithm/hex.hpp>
 using namespace mn::CppLinuxSerial;
 
 PortHandler::PortHandler(std::string port_address){

@@ -9,9 +9,9 @@ auto Base::initOperationCmd() -> void{
     this -> client_.calculateCheckSum(this -> data_.stop_cmd_, 0, 3, this -> data_.stop_cmd_[4]);
     this -> data_.stop_response_.resize(5, 0x00);
 
-    this -> data_.operate_cmd_ = {0x3E, 0x88, this->device_id_, 0x00, 0x00};
-    this -> client_.calculateCheckSum(this -> data_.operate_cmd_, 0, 3, this -> data_.operate_cmd_[4]);
-    this -> data_.operate_response_.resize(5, 0x00);
+    this -> data_.turn_on_cmd_ = {0x3E, 0x88, this->device_id_, 0x00, 0x00};
+    this -> client_.calculateCheckSum(this -> data_.turn_on_cmd_, 0, 3, this -> data_.turn_on_cmd_[4]);
+    this -> data_.turn_on_response_.resize(5, 0x00);
 }
 
 
@@ -35,12 +35,12 @@ auto Base::stop() -> void{
     this -> stop_success = (this -> data_.stop_cmd_ == this -> data_.stop_response_);
 }
 
-auto Base::operate() -> void{
+auto Base::turnOn() -> void{
     /*Restore motor operation from motor stop command (control mode before restoration stop).*/
 
-    this -> client_.send(this -> data_.operate_cmd_);
-    this -> client_.receive(this -> data_.operate_response_);
+    this -> client_.send(this -> data_.turn_on_cmd_);
+    this -> client_.receive(this -> data_.turn_on_response_);
 
     /*On successful attempt, the response should be the same as the command*/
-    this -> operate_success = (this -> data_.operate_cmd_ == this -> data_.operate_response_);
+    this -> turn_on_success = (this -> data_.turn_on_cmd_ == this -> data_.turn_on_response_);
 }

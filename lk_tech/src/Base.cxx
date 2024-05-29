@@ -2,7 +2,7 @@
 
 
 Base::~Base(){
-    this -> stop();
+    // this -> stop();
     // this -> shutdown();
 }
 
@@ -18,7 +18,7 @@ Base::Base(std::string port_address, uint8_t device_id): device_id_{device_id}, 
     this -> initOperationCmd();
     this -> initTorqueCmd();
 
-    this -> operate();
+    this -> turnOn();
 }
 
 

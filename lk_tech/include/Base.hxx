@@ -37,17 +37,23 @@ class Base{
         auto getSingleTurnAngle() -> void;
 
         auto initStateCmd() -> void;
-        auto readTemperatureVoltage() -> void;
+        auto getTemperatureVoltage() -> void;
         auto cleanError() -> void;
-        auto readTorqueSpeedPose() -> void;
-        auto readPhaseCurrent() -> void;
+        auto getTorqueSpeedPose() -> void;
+        auto getPhaseCurrent() -> void;
 
         auto initOperationCmd() -> void;
         auto shutdown() -> void;
         auto stop() -> void;
-        auto operate() -> void;
+        auto turnOn() -> void;
 
         auto initTorqueCmd() -> void;
+        auto openLoopTorque(const std::int16_t&) -> void;  // Not Working...
+        auto openLoopTorque(const std::int16_t&&) -> void; // Not Working...
+
+        auto closedLoopTorque(const std::int16_t&) -> void;  // Not Working...
+        auto closedLoopTorque(const std::int16_t&&) -> void; // Not Working...
+
 
         // Utility
         auto removeSpace(const std::vector<std::uint8_t>&) -> void;
@@ -78,9 +84,9 @@ class Base{
         std::int16_t speed{};
 
         std::int16_t phase_a_current{}, phase_b_current{}, phase_c_current{};
+        bool shutdown_success{}, stop_success{}, turn_on_success{};
 
-        bool shutdown_success{}, stop_success{}, operate_success{};
-
+        std::int16_t power{};
 };
 
 #endif
