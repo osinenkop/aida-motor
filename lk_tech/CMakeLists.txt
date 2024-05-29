@@ -16,20 +16,21 @@ include_directories(${LibSerial_INCLUDE_DIRS})
 
 find_package(Boost REQUIRED COMPONENTS system)
 
-# add_executable(${PROJECT_NAME} main.cxx PortHandler.cxx)
 add_executable(
     ${PROJECT_NAME} 
     main.cxx 
     PortHandler.hxx 
     PortHandler.cxx 
-    Motor.hxx 
-    Motor.cxx 
 
-    Model.cxx
-    PID.cxx
-    Acceleration.cxx
-    Position.cxx
-    State.cxx
+    Base.hxx 
+    Base.cxx 
+    Base_Model.cxx
+    Base_PID.cxx
+    Base_Acceleration.cxx
+    Base_Position.cxx
+    Base_State.cxx
+    Base_Operation.cxx
+    Base_Torque.cxx
     )
 
 
