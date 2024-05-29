@@ -38,8 +38,25 @@ struct Data{
 
     std::vector<std::uint8_t> read_temperature_and_voltage_cmd_;
     std::vector<std::uint8_t> read_temperature_and_voltage_response_;
-    
 
+    std::vector<std::uint8_t> clear_error_cmd_;
+    std::vector<std::uint8_t> clear_error_response_;
+
+    std::vector<std::uint8_t> read_temperature_and_torque_speed_pose_cmd_;
+    std::vector<std::uint8_t> read_temperature_and_torque_speed_pose_response_;
+
+    std::vector<std::uint8_t> read_temperature_and_phase_current_cmd_;
+    std::vector<std::uint8_t> read_temperature_and_phase_current_response_;
+
+    std::vector<std::uint8_t> shutdown_cmd_;
+    std::vector<std::uint8_t> shutdown_response_;
+
+    std::vector<std::uint8_t> stop_cmd_;
+    std::vector<std::uint8_t> stop_response_;
+
+    std::vector<std::uint8_t> operate_cmd_;
+    std::vector<std::uint8_t> operate_response_;
+    
 };
 
 
