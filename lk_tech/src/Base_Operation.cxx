@@ -1,5 +1,7 @@
 #include "Base.hxx"
 
+
+
 auto Base::initOperationCmd() -> void{
     this -> data_.shutdown_cmd_ = {0x3E, 0x80, this->device_id_, 0x00, 0x00};
     this -> client_.calculateCheckSum(this -> data_.shutdown_cmd_, 0, 3, this -> data_.shutdown_cmd_[4]);
@@ -23,6 +25,7 @@ auto Base::shutdown() -> void{
 
     /*On successful attempt, the response should be the same as the command*/
     this -> shutdown_success = (this -> data_.shutdown_cmd_ == this -> data_.shutdown_response_);
+    assert(this -> shutdown_success);
 }
 
 auto Base::stop() -> void{
@@ -33,6 +36,7 @@ auto Base::stop() -> void{
 
     /*On successful attempt, the response should be the same as the command*/
     this -> stop_success = (this -> data_.stop_cmd_ == this -> data_.stop_response_);
+    assert(this -> stop_success);
 }
 
 auto Base::turnOn() -> void{
@@ -43,4 +47,5 @@ auto Base::turnOn() -> void{
 
     /*On successful attempt, the response should be the same as the command*/
     this -> turn_on_success = (this -> data_.turn_on_cmd_ == this -> data_.turn_on_response_);
+    assert(this -> turn_on_success);
 }
