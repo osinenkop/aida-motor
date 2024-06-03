@@ -6,6 +6,17 @@
 #include <memory>
 #include <cstdint>
 
+// Test Checks
+#include <cassert>
+
+struct productInfo
+{
+std::uint8_t driver_name [20]; // Driver name
+std::uint8_t motor_name [20]; // Name of motor
+std::uint8_t hardware_version; // drive the hardware version
+std::uint8_t firmware_version; // firmware version
+};
+
 class Base{
     public:
         Base(std::string, std::uint8_t);
@@ -19,19 +30,15 @@ class Base{
         auto initPIDCmd() -> void;
         auto getPID() -> void;
         auto setTemporaryPID(const std::array<std::uint8_t, 6>&) -> void;
-        auto setTemporaryPID(const std::array<std::uint8_t, 6>&&) -> void;
         auto setPermanentPID(const std::array<std::uint8_t, 6>&) -> void;
-        auto setPermanentPID(const std::array<std::uint8_t, 6>&&) -> void;
 
         auto initAccelerationCmd() -> void;
         auto getAcceleration() -> void;
         auto setAcceleration(std::uint32_t&) -> void;
-        auto setAcceleration(std::uint32_t&&) -> void;
 
         auto initPositionCmd() -> void;
         auto getPosition() -> void;
         auto setTemporaryPositionZero(std::uint16_t&) -> void;
-        auto setTemporaryPositionZero(std::uint16_t&&) -> void;
         auto setPermanentPositionZero() -> void;
         auto getMultiTurnAngle() -> void;
         auto getSingleTurnAngle() -> void;
@@ -47,31 +54,29 @@ class Base{
         auto stop() -> void;
         auto turnOn() -> void;
 
-        auto initTorqueCmd() -> void;
-        auto openLoopTorque(const std::int16_t&) -> void;  // Not Working...
-        auto openLoopTorque(const std::int16_t&&) -> void; // Not Working...
+        auto initTorqueControlCmd() -> void;
+        auto openLoopTorqueControl(const std::int16_t&) -> void;  // Not Working...
+        auto closedLoopTorqueControl(const std::int16_t&) -> void;  // Not Working...
 
-        auto closedLoopTorque(const std::int16_t&) -> void;  // Not Working...
-        auto closedLoopTorque(const std::int16_t&&) -> void; // Not Working...
+        auto initSpeedControlCmd() -> void;
+        auto closedLoopSpeedControl(const std::int32_t&) -> void;
 
+        auto initPositionControlCmd() -> void;
+        auto closedLoopMultiPositionControl(const std::int64_t&) -> void;
+        auto closedLoopMultiPositionControl(const std::int64_t&, const std::uint32_t&) -> void;
 
-        // Utility
-        auto removeSpace(const std::vector<std::uint8_t>&) -> void;
-
+        auto closedLoopSinglePositionControl(const std::uint16_t&, const std::int8_t&) -> void;
+        auto closedLoopSinglePositionControl(const std::uint16_t&,  const std::int8_t&, const std::uint32_t&) -> void;
 
     
     private:
         std::uint8_t device_id_;
         PortHandler client_;
         Data data_;
-        // std::string response_str;
-        std::uint8_t reduction_ratio{8};
+        productInfo product_info;
         
 
     public:
-        std::string response_str;
-
-        std::string model;
         std::array<std::uint8_t, 6> pid_value;
         int32_t acceleration{};
         std::uint16_t raw_position{}, position{}, position_offset{};
