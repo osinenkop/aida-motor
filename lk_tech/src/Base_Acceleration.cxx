@@ -40,18 +40,3 @@ auto Base::setAcceleration(uint32_t& acceleration) -> void{
     this -> getAcceleration();
 }
 
-auto Base::setAcceleration(uint32_t&& acceleration) -> void{
-    /*The computer host sends the command to write acceleration parameters into RAM, 
-    and the parameters will lose when power off. Acceleration data is int32_t type, unit 1dps/s.*/
-
-    this -> data_.write_acc_cmd_[5] = ((acceleration      ) & 0xFF);      // *(uint8_t *)(&Accel)
-    this -> data_.write_acc_cmd_[6] = ((acceleration >> 8 ) & 0xFF);      // *((uint8_t *)(&Accel)+1)
-    this -> data_.write_acc_cmd_[7] = ((acceleration >> 16) & 0xFF);      // *((uint8_t *)(&Accel)+2)
-    this -> data_.write_acc_cmd_[8] = ((acceleration >> 24) & 0xFF);      // *((uint8_t *)(&Accel)+3)
-    this -> client_.calculateCheckSum(this -> data_.write_acc_cmd_, 5, 8, this -> data_.write_acc_cmd_[10]);
-    
-    this -> client_.send(this -> data_.write_acc_cmd_);
-    usleep(1000000);
-    this -> getAcceleration();
-}
-
