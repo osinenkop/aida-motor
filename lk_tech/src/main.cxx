@@ -57,13 +57,17 @@ int main(){
         // m.readTorqueSpeedPose();
         // std::int16_t a{200};
         // m.openLoopTorque(a);
-        m.turnOn();
-        printf("%d\n", m.turn_on_success);
-        // printf("len: %d\n", m.response_str[3]);
-        // printf("res: %d\n", m.response_str[5]);
-        m.closedLoopTorque(100);
+        // m.turnOn();
+        // // printf("len: %d\n", m.response_str[3]);
+        // // printf("res: %d\n", m.response_str[5]);
+        // m.closedLoopTorqueControl(1000);
+        // m.closedLoopSpeedControl(1000);
+        m.closedLoopSinglePositionControl(30000, 0, 50000);
+        
         for(int k{}; k < 100; k++){
             m.getTorqueSpeedPose();
+            
+            // m.closedLoopSpeed(1000);
             printf("Temp: %d, Torq : %d, Speed: %d, Pose: %d\n", m.temperature, m.torque, m.speed, m.position);
         usleep(10000);}
 
@@ -78,7 +82,7 @@ int main(){
 
             // m.getMotorMultiTurnAngle();
             // printf("%Lf\n", m.multi_turn_angle);
-//         m.getModel();
+        // m.getModel();
 // printf("%s\n", m.model.c_str());
     // m.readTemperatureAndVoltage();
     // printf("%d %d\n", m.temperature, m.voltage);
