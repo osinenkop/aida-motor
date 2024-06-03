@@ -73,21 +73,6 @@ auto Base::setTemporaryPositionZero(std::uint16_t& offset) -> void{
 }
 
 
-auto Base::setTemporaryPositionZero(std::uint16_t&& offset) -> void{
-    /*The computer host sends the command to set the encoder Offset , 
-    that the encoder Offset to be written is the type of std::uint16_t, and value range of the 14bit encoder is 0~16383.*/
-    offset &= this -> data_.encoder_mask_;
-    this -> data_.write_temp_enc_offset_cmd_[5] = ((offset          ) & 0xFF);     // *(std::uint8_t *)(&encoderOffset)
-    this -> data_.write_temp_enc_offset_cmd_[6] = ((offset >> 8     ) & 0xFF);     // *((std::uint8_t *)(&encoderOffset)+1)
-    
-    this -> client_.calculateCheckSum(this -> data_.write_temp_enc_offset_cmd_, 5, 6, this -> data_.write_temp_enc_offset_cmd_[7]);
-
-    this -> client_.send(this -> data_.write_temp_enc_offset_cmd_);
-    usleep(1000000);
-    this -> getPosition();
-}
-
-
 auto Base::setPermanentPositionZero() -> void{
     /*Writes the current encoder position of the motor into ROM as the initial position.
     Attention:
@@ -143,6 +128,7 @@ auto Base::getSingleTurnAngle() -> void{
                                     (this -> data_.read_single_turn_response_[8]   << 24   ) 
                                     );
 }
+
 
 
 
