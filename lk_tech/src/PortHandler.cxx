@@ -18,11 +18,11 @@ PortHandler::~PortHandler(){
 
 auto PortHandler::send(const std::vector<uint8_t>& command) -> void{
     this -> serial_port_.WriteBinary(command);
-    usleep(5000); // 4ms delay between 2 consecutive "send/receive" calls.
+    usleep(5000); // 5ms delay between 2 consecutive "send/receive" calls.
 }
 
 auto PortHandler::receive(std::vector<uint8_t>& response) -> void{
-    usleep(5000); // 4ms delay between 2 consecutive "send/receive" calls.
+    usleep(5000); // 5ms delay between 2 consecutive "send/receive" calls.
     this -> serial_port_.ReadBinary(response);
 }
 
