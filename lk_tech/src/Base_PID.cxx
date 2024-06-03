@@ -48,22 +48,6 @@ auto Base::setTemporaryPID(const std::array<uint8_t, 6>& pid) -> void{
     this -> getPID();
 }
 
-auto Base::setTemporaryPID(const std::array<uint8_t, 6>&& pid) -> void{
-    /*The computer host sends command to write PID parameters into RAM, and the parameters become invalid when power off.*/
-
-    // std::copy(pid.begin(), pid.end(), this -> write_pid_ram_cmd_.begin()+5);
-    this -> data_.write_pid_ram_cmd_[5]   = pid[0];       // Position_Kp
-    this -> data_.write_pid_ram_cmd_[6]   = pid[1];       // Position_Ki
-    this -> data_.write_pid_ram_cmd_[7]   = pid[2];       // Speed_Kp
-    this -> data_.write_pid_ram_cmd_[8]   = pid[3];       // Speed_Ki
-    this -> data_.write_pid_ram_cmd_[9]   = pid[4];       // Torque_Kp
-    this -> data_.write_pid_ram_cmd_[10]  = pid[5];       // Torque_Ki
-
-    this -> client_.calculateCheckSum(this -> data_.write_pid_ram_cmd_, 5, 10, this -> data_.write_pid_ram_cmd_[11]);
-    
-    this -> client_.send(this -> data_.write_pid_ram_cmd_);
-    this -> getPID();
-}
 
 auto Base::setPermanentPID(const std::array<uint8_t, 6>& pid) -> void{
     /*The computer host sends the command to write the PID parameter to RAM. It is still valid when power off.*/
@@ -78,24 +62,6 @@ auto Base::setPermanentPID(const std::array<uint8_t, 6>& pid) -> void{
 
     this -> client_.calculateCheckSum(this -> data_.write_pid_rom_cmd_, 5, 10, this -> data_.write_pid_rom_cmd_[11]);
 
-    this -> client_.send(this -> data_.write_pid_rom_cmd_);
-    usleep(1000000);
-    this -> getPID();
-}
-
-auto Base::setPermanentPID(const std::array<uint8_t, 6>&& pid) -> void{
-    /*The computer host sends the command to write the PID parameter to RAM. It is still valid when power off.*/
-
-    // std::copy(pid.begin(), pid.end(), this -> write_pid_rom_cmd_.begin()+5);
-    this -> data_.write_pid_rom_cmd_[5]   = pid[0];       // Position_Kp
-    this -> data_.write_pid_rom_cmd_[6]   = pid[1];       // Position_Ki
-    this -> data_.write_pid_rom_cmd_[7]   = pid[2];       // Speed_Kp
-    this -> data_.write_pid_rom_cmd_[8]   = pid[3];       // Speed_Ki
-    this -> data_.write_pid_rom_cmd_[9]   = pid[4];       // Torque_Kp
-    this -> data_.write_pid_rom_cmd_[10]  = pid[5];       // Torque_Ki
-
-    this -> client_.calculateCheckSum(this -> data_.write_pid_rom_cmd_, 5, 10, this -> data_.write_pid_rom_cmd_[11]);
-    
     this -> client_.send(this -> data_.write_pid_rom_cmd_);
     usleep(1000000);
     this -> getPID();
