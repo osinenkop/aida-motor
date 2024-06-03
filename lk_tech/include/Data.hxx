@@ -60,7 +60,21 @@ struct Data{
 
     std::vector<std::uint8_t> closed_loop_torque_cmd_;
     std::vector<std::uint8_t> closed_loop_torque_response_;
-    
+
+    std::vector<std::uint8_t> closed_loop_speed_cmd_;
+    std::vector<std::uint8_t> closed_loop_speed_response_;
+
+    std::vector<std::uint8_t> closed_loop_multi_turn_position_1_cmd_;
+    std::vector<std::uint8_t> closed_loop_multi_turn_position_1_response_;
+
+    std::vector<std::uint8_t> closed_loop_multi_turn_position_2_cmd_;
+    std::vector<std::uint8_t> closed_loop_multi_turn_position_2_response_;
+
+    std::vector<std::uint8_t> closed_loop_single_turn_position_1_cmd_;
+    std::vector<std::uint8_t> closed_loop_single_turn_position_1_response_;
+
+    std::vector<std::uint8_t> closed_loop_single_turn_position_2_cmd_;
+    std::vector<std::uint8_t> closed_loop_single_turn_position_2_response_;
 };
 
 
