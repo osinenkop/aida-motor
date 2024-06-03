@@ -30,7 +30,9 @@ add_executable(
     Base_Position.cxx
     Base_State.cxx
     Base_Operation.cxx
-    Base_Torque.cxx
+    Base_Torque_Control.cxx
+    Base_Speed_Control.cxx
+    Base_Position_Control.cxx
     )
 
 
