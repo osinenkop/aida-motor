@@ -1,18 +1,12 @@
 
-#include "Base.hxx"
+// #include "Base.hxx"
+#include "Motor.cxx"
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
 #include <unistd.h>
 
-#include <iterator>
-// template<int N>
-template<typename T>
-std::ostream& operator<< (std::ostream& s, const std::vector<T>& arr){
-    std::ranges::copy(arr, std::ostream_iterator<T>(s, " "));
-    s << "\n";
-    return s;
-}
 
 
 int main(){
@@ -20,7 +14,12 @@ int main(){
     // std::vector <int> abc{1,2,3};
     // std::cout << abc;
 
-    Base m("/dev/ttyUSB0", 0x03);
+    // Base m("/dev/ttyUSB0", 0x03);
+    
+    Motor m("/dev/ttyUSB0", 0x03);
+    
+    m.getProductInfo();
+    std::cout << m.getProductInfo().size() << "\n";
 
     for(int i{}; i < 1; i++){
         // std::array<uint8_t, 6> arr{100, 100, 50, 70, 50, 52};
@@ -62,16 +61,20 @@ int main(){
         // // printf("res: %d\n", m.response_str[5]);
         // m.closedLoopTorqueControl(1000);
         // m.closedLoopSpeedControl(1000);
-        m.closedLoopSinglePositionControl(30000, 0, 50000);
+        // m.closedLoopSinglePositionControl(30000, 0, 50000);
+        std::int32_t num{36000};
+        // m.closedLoopIncrementalPositionControl(30000);
         
-        for(int k{}; k < 100; k++){
-            m.getTorqueSpeedPose();
-            
-            // m.closedLoopSpeed(1000);
-            printf("Temp: %d, Torq : %d, Speed: %d, Pose: %d\n", m.temperature, m.torque, m.speed, m.position);
-        usleep(10000);}
+        // for(int k{}; k < 100; k++){
+        //     // m.getTorqueSpeedPose();
+        //     // m.closedLoopIncrementalPositionControl(num);
+        //     // m.closedLoopSpeedControl(num);
+        //     m.closedLoopSinglePositionControl(num, 0, 50000);
+        //     printf("Temp: %d, Torq : %d, Speed: %d, Pose: %d\n", m.temperature, m.torque, m.speed, m.position);
+        // usleep(10000);
+        // }
 
-        m.stop();
+        m.base.stop();
             
         // std::clog << "Temp: " << m.temperature << ", Torque :" << m.torque << ", Speed: " << m.speed << ", Pose: " << m.position << "\n";
         // m.getPosition();
