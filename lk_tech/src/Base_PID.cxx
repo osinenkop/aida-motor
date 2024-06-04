@@ -19,8 +19,6 @@ auto Base::getPID() -> void{
     this -> client_.send(this -> data_.read_pid_cmd_);
     this -> client_.receive(this -> data_.read_pid_response_);
 
-    // // Position_Kp, Position_Ki, Speed_Kp, Speed_Ki, Torque_Kp, Torque_Ki
-    // std::copy(this -> response_str.begin()+5, this -> response_str.begin()+11, this -> pid_value.begin());
     
     this -> pid_value[0] = this -> data_.read_pid_response_[5];     // Position_Kp
     this -> pid_value[1] = this -> data_.read_pid_response_[6];     // Position_Ki
@@ -34,7 +32,6 @@ auto Base::getPID() -> void{
 auto Base::setTemporaryPID(const std::array<uint8_t, 6>& pid) -> void{
     /*The computer host sends command to write PID parameters into RAM, and the parameters become invalid when power off.*/
 
-    // std::copy(pid.begin(), pid.end(), this -> write_pid_ram_cmd_.begin()+5);
     this -> data_.write_pid_ram_cmd_[5]   = pid[0];       // Position_Kp
     this -> data_.write_pid_ram_cmd_[6]   = pid[1];       // Position_Ki
     this -> data_.write_pid_ram_cmd_[7]   = pid[2];       // Speed_Kp
