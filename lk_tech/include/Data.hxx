@@ -75,6 +75,13 @@ struct Data{
 
     std::vector<std::uint8_t> closed_loop_single_turn_position_2_cmd_;
     std::vector<std::uint8_t> closed_loop_single_turn_position_2_response_;
+
+    /*NOT WORKING*/
+    // std::vector<std::uint8_t> closed_loop_incremental_turn_position_1_cmd_;
+    // std::vector<std::uint8_t> closed_loop_incremental_turn_position_1_response_;
+
+    std::vector<std::uint8_t> closed_loop_incremental_turn_position_2_cmd_;
+    std::vector<std::uint8_t> closed_loop_incremental_turn_position_2_response_;
 };
 
 
