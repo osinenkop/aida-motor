@@ -16,6 +16,16 @@ auto Base::initPositionControlCmd() -> void{
     this -> data_.closed_loop_single_turn_position_2_cmd_ = {0x3E, 0xA6, this->device_id_, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     this -> client_.calculateCheckSum(this -> data_.closed_loop_single_turn_position_2_cmd_, 0, 3, this -> data_.closed_loop_single_turn_position_2_cmd_[4]);
     this -> data_.closed_loop_single_turn_position_2_response_.resize(13, 0x00);
+
+    /*NOT WORKING*/
+    // this -> data_.closed_loop_incremental_turn_position_1_cmd_ = {0x3E, 0xA7, this->device_id_, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    // this -> client_.calculateCheckSum(this -> data_.closed_loop_incremental_turn_position_1_cmd_, 0, 3, this -> data_.closed_loop_incremental_turn_position_1_cmd_[4]);
+    // this -> data_.closed_loop_incremental_turn_position_1_response_.resize(13, 0x00);
+
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_ = {0x3E, 0xA8, this->device_id_, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    this -> client_.calculateCheckSum(this -> data_.closed_loop_incremental_turn_position_2_cmd_, 0, 3, this -> data_.closed_loop_incremental_turn_position_2_cmd_[4]);
+    this -> data_.closed_loop_incremental_turn_position_2_response_.resize(13, 0x00);
+
 }
 
 auto Base::closedLoopMultiPositionControl(const std::int64_t& value) -> void{
@@ -203,5 +213,106 @@ auto Base::closedLoopSinglePositionControl(const std::uint16_t& value, const std
     this -> position  = (
                         (this -> data_.closed_loop_single_turn_position_2_response_[10]           ) +
                         (this -> data_.closed_loop_single_turn_position_2_response_[11] << 8      ) 
+                        );
+}
+
+/*NOT WORKING*/
+// auto Base::closedLoopIncrementalPositionControl(const std::int32_t& value) -> void{
+//     /*The host sends this command to control the incremental position of the motor
+//     1.The control value of angle Increment is int32_t type, and the corresponding actual position is 0.01degree / LSB, 36000 represents 360 °. 
+//     The direction of motor rotation is determined by the sign of this parameter.*/
+
+//     this -> data_.closed_loop_incremental_turn_position_1_cmd_[5]   =  ((value              ) & 0xFF);
+//     this -> data_.closed_loop_incremental_turn_position_1_cmd_[6]   =  ((value   >> 8       ) & 0xFF);
+//     this -> data_.closed_loop_incremental_turn_position_1_cmd_[7]   =  ((value   >> 16      ) & 0xFF);
+//     this -> data_.closed_loop_incremental_turn_position_1_cmd_[8]   =  ((value   >> 24      ) & 0xFF);
+
+//     this -> client_.calculateCheckSum(this -> data_.closed_loop_incremental_turn_position_1_cmd_, 5, 8, this -> data_.closed_loop_incremental_turn_position_1_cmd_[9]);
+
+
+//     this -> client_.send(this -> data_.closed_loop_incremental_turn_position_1_cmd_);
+//     this -> client_.receive(this -> data_.closed_loop_incremental_turn_position_1_response_);
+
+//     for(auto c: this -> data_.closed_loop_incremental_turn_position_1_response_) printf("%hhx ", c);
+//     printf("\n %d \n", value);
+
+//     /*
+//     The motor replies to the host after receiving the command, and the frame data contains the following data.
+//     1. Motor temperature (int8_t type, 1°C/LSB).
+//     2. Torque current IQ of the motor (int16_t type, range -2048~2048, corresponding to the actual torque current range -33A ~33A). Motor power output value (int16_t type, range -1000~1000) 
+//     3. Motor speed (int16_t type, 1dps/LSB).
+//     4. Encoder position value (uint16_t type, 14bit encoder value range 0~16383)*/
+
+
+//     this -> temperature = this -> data_.closed_loop_incremental_turn_position_1_response_[5];
+
+//     this -> torque    = (
+//                         (this -> data_.closed_loop_incremental_turn_position_1_response_[6]            ) +
+//                         (this -> data_.closed_loop_incremental_turn_position_1_response_[7] << 8       ) 
+//                         );
+
+
+//     this -> speed     = (
+//                         (this -> data_.closed_loop_incremental_turn_position_1_response_[8]            ) +
+//                         (this -> data_.closed_loop_incremental_turn_position_1_response_[9] << 8       ) 
+//                         );
+
+
+//     this -> position  = (
+//                         (this -> data_.closed_loop_incremental_turn_position_1_response_[10]           ) +
+//                         (this -> data_.closed_loop_incremental_turn_position_1_response_[11] << 8      ) 
+//                         );
+// }
+
+
+
+auto Base::closedLoopIncrementalPositionControl(const std::int32_t& value, const std::uint32_t& max_speed) -> void{
+    /*The host sends this command to control the incremental position of the motor
+    1. The control value of angle Increment is int32_t type, and the corresponding actual position is 0.01degree / LSB, 36000 represents 360 °. 
+    The direction of motor rotation is determined by the sign of this parameter.
+    2. The control value of maxSpeed limits the maximum speed of the motor. 
+    It is uint32_t type, which corresponds to the actual speed of 0.01dps / LSB, 36000 represents 360dps.*/
+
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[5]    =  ((value              ) & 0xFF);
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[6]    =  ((value   >> 8       ) & 0xFF);
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[7]    =  ((value   >> 16      ) & 0xFF);
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[8]    =  ((value   >> 24      ) & 0xFF);
+
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[9]    =  ((max_speed              ) & 0xFF);
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[10]   =  ((max_speed   >> 8       ) & 0xFF);
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[11]   =  ((max_speed   >> 16      ) & 0xFF);
+    this -> data_.closed_loop_incremental_turn_position_2_cmd_[12]   =  ((max_speed   >> 24      ) & 0xFF);
+
+    this -> client_.calculateCheckSum(this -> data_.closed_loop_incremental_turn_position_2_cmd_, 5, 12, this -> data_.closed_loop_incremental_turn_position_2_cmd_[13]);
+
+    this -> client_.send(this -> data_.closed_loop_incremental_turn_position_2_cmd_);
+    this -> client_.receive(this -> data_.closed_loop_incremental_turn_position_2_response_);
+
+    /*
+    The motor replies to the host after receiving the command, and the frame data contains the following data.
+    1.  Motor temperature (int8_t type, 1°C/LSB).
+    2.  Torque current IQ of the motor (int16_t type, range -2048~2048, corresponding to the actual torque current range -33A ~33A). 
+        Motor power output value (int16_t type, range -1000~1000) 
+    3.  Motor speed (int16_t type, 1dps/LSB).
+    4.  Encoder position value (uint16_t type, 14bit encoder value range 0~16383)*/
+
+
+    this -> temperature = this -> data_.closed_loop_incremental_turn_position_2_response_[5];
+
+    this -> torque    = (
+                        (this -> data_.closed_loop_incremental_turn_position_2_response_[6]            ) +
+                        (this -> data_.closed_loop_incremental_turn_position_2_response_[7] << 8       ) 
+                        );
+
+
+    this -> speed     = (
+                        (this -> data_.closed_loop_incremental_turn_position_2_response_[8]            ) +
+                        (this -> data_.closed_loop_incremental_turn_position_2_response_[9] << 8       ) 
+                        );
+
+
+    this -> position  = (
+                        (this -> data_.closed_loop_incremental_turn_position_2_response_[10]           ) +
+                        (this -> data_.closed_loop_incremental_turn_position_2_response_[11] << 8      ) 
                         );
 }
