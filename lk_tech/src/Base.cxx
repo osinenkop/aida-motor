@@ -6,7 +6,7 @@ Base::~Base(){
     // this -> shutdown();
 }
 
-Base::Base(std::string port_address, uint8_t device_id): device_id_{device_id}, client_{PortHandler(port_address)}{
+Base::Base(std::string port_address, std::uint8_t device_id): device_id_{device_id}, client_{PortHandler(port_address)}{
 
     this -> initModelCmd();
     this -> initPIDCmd();
@@ -18,6 +18,7 @@ Base::Base(std::string port_address, uint8_t device_id): device_id_{device_id}, 
     this -> initTorqueControlCmd();
     this -> initSpeedControlCmd();
     this -> initPositionControlCmd();
+    
     
 
     this -> turnOn();
