@@ -16,9 +16,9 @@ auto Base::getModel() -> void{
     this -> product_info.hardware_version = this -> data_.model_response_[45];
     this -> product_info.firmware_version = this -> data_.model_response_[46];
 
-    printf("driver_name: %s\n",         this -> product_info.driver_name);
-    printf("motor_name: %s\n",          this -> product_info.motor_name);
-    printf("hardware_version: %c\n",    this -> product_info.hardware_version);
-    printf("firmware_version: %c\n\n",  this -> product_info.firmware_version);
+    // printf("driver_name: %s\n",         this -> product_info.driver_name);
+    // printf("motor_name: %s\n",          this -> product_info.motor_name);
+    // printf("hardware_version: %c\n",    this -> product_info.hardware_version);
+    // printf("firmware_version: %c\n\n",  this -> product_info.firmware_version);
 }
 
