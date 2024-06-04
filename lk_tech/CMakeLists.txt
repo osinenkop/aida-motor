@@ -22,6 +22,9 @@ add_executable(
     PortHandler.hxx 
     PortHandler.cxx 
 
+    Motor.hxx
+    # Motor.cxx
+
     Base.hxx 
     Base.cxx 
     Base_Model.cxx
@@ -33,6 +36,8 @@ add_executable(
     Base_Torque_Control.cxx
     Base_Speed_Control.cxx
     Base_Position_Control.cxx
+
+
     )
 
 
