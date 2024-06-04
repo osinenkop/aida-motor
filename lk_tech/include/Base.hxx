@@ -21,8 +21,6 @@ class Base{
     public:
         Base(std::string, std::uint8_t);
         ~Base();
-        // void Send(const int16_t, const int16_t);
-        std::string Receive();
 
         auto initModelCmd() -> void;
         auto getModel() -> void;
@@ -64,15 +62,17 @@ class Base{
         auto initPositionControlCmd() -> void;
         auto closedLoopMultiPositionControl(const std::int64_t&) -> void;
         auto closedLoopMultiPositionControl(const std::int64_t&, const std::uint32_t&) -> void;
-
         auto closedLoopSinglePositionControl(const std::uint16_t&, const std::int8_t&) -> void;
         auto closedLoopSinglePositionControl(const std::uint16_t&,  const std::int8_t&, const std::uint32_t&) -> void;
+        // auto closedLoopIncrementalPositionControl(const std::int32_t&) -> void;  /*NOT WORKING*/
+        auto closedLoopIncrementalPositionControl(const std::int32_t&, const std::uint32_t&) -> void;
 
-    
     private:
-        std::uint8_t device_id_;
         PortHandler client_;
         Data data_;
+
+    public:
+        std::uint8_t device_id_;
         productInfo product_info;
         
 
