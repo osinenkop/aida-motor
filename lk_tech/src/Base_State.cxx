@@ -33,8 +33,8 @@ auto Base::getTemperatureVoltage() -> void{
     this -> temperature     =   this -> data_.read_temperature_and_voltage_response_[5];
 
     this -> voltage         =   (
-                                (this -> data_.read_temperature_and_voltage_response_[7]      ) +
-                                (this -> data_.read_temperature_and_voltage_response_[8] << 8 )
+                                (static_cast<uint16_t>(this -> data_.read_temperature_and_voltage_response_[7])      ) |
+                                (static_cast<uint16_t>(this -> data_.read_temperature_and_voltage_response_[8]) << 8 )
                                 );
 
     /*
@@ -63,8 +63,8 @@ auto Base::cleanError() -> void{
     this -> temperature     =   this -> data_.clear_error_response_[5];
 
     this -> voltage         =   (
-                                (this -> data_.clear_error_response_[7]      ) +
-                                (this -> data_.clear_error_response_[8] << 8 )
+                                (static_cast<uint16_t>(this -> data_.clear_error_response_[7])      ) |
+                                (static_cast<uint16_t>(this -> data_.clear_error_response_[8]) << 8 )
                                 );
 
     /*
@@ -93,24 +93,24 @@ auto Base::getTorqueSpeedPose() -> void{
     3. Motor speed (int16_t type, 1dps/LSB).
     4. Encoder position value (uint16_t type, the value range of 14bit encoder is 0~16383).*/
 
-    this -> temperature     =   this -> data_.read_temperature_and_torque_speed_pose_response_[5];
+    this -> temperature = this -> data_.read_temperature_and_torque_speed_pose_response_[5];
 
-    this -> torque          =   (
-                                (this -> data_.read_temperature_and_torque_speed_pose_response_[6]       )     +
-                                (this -> data_.read_temperature_and_torque_speed_pose_response_[7] << 8  )
-                                );
-
-
-    this -> speed           =   (
-                                (this -> data_.read_temperature_and_torque_speed_pose_response_[8]       )     +
-                                (this -> data_.read_temperature_and_torque_speed_pose_response_[9] << 8  )
-                                );
+    this -> torque    = (
+                        (static_cast<int16_t>(this -> data_.read_temperature_and_torque_speed_pose_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.read_temperature_and_torque_speed_pose_response_[7]) << 8       ) 
+                        );
 
 
-    this -> position        =   (
-                                (this -> data_.read_temperature_and_torque_speed_pose_response_[10]       )    +
-                                (this -> data_.read_temperature_and_torque_speed_pose_response_[11] << 8  )
-                                ) & this -> data_.encoder_mask_;
+    this -> speed     = (
+                        (static_cast<int16_t>(this -> data_.read_temperature_and_torque_speed_pose_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.read_temperature_and_torque_speed_pose_response_[9]) << 8       ) 
+                        );
+
+
+    this -> position  = (
+                        (static_cast<uint16_t>(this -> data_.read_temperature_and_torque_speed_pose_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.read_temperature_and_torque_speed_pose_response_[11]) << 8      ) 
+                        ) & this -> data_.encoder_mask_;
 }
 
 
@@ -129,17 +129,17 @@ auto Base::getPhaseCurrent() -> void{
     this -> temperature     =   this -> data_.read_temperature_and_phase_current_response_[5];
 
     this -> phase_a_current =   (
-                                (this -> data_.read_temperature_and_phase_current_response_[6]       )     +
-                                (this -> data_.read_temperature_and_phase_current_response_[7] << 8  )
+                                (static_cast<int16_t>(this -> data_.read_temperature_and_phase_current_response_[6])      )     |
+                                (static_cast<int16_t>(this -> data_.read_temperature_and_phase_current_response_[7]) << 8  )
                                 );
 
     this -> phase_b_current =   (
-                                (this -> data_.read_temperature_and_phase_current_response_[8]       )     +
-                                (this -> data_.read_temperature_and_phase_current_response_[9] << 8  )
+                                (static_cast<int16_t>(this -> data_.read_temperature_and_phase_current_response_[8])       )     |
+                                (static_cast<int16_t>(this -> data_.read_temperature_and_phase_current_response_[9]) << 8  )
                                 );
 
     this -> phase_c_current =   (
-                                (this -> data_.read_temperature_and_phase_current_response_[10]       )    +
-                                (this -> data_.read_temperature_and_phase_current_response_[11] << 8  )
+                                (static_cast<int16_t>(this -> data_.read_temperature_and_phase_current_response_[10])       )    |
+                                (static_cast<int16_t>(this -> data_.read_temperature_and_phase_current_response_[11]) << 8  )
                                 );
 }
