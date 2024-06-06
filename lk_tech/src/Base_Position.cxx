@@ -33,32 +33,26 @@ auto Base::getPosition() -> void{
     3.EncoderOffset (std::uint16_t type, eg:14bit encoder value range 0~16383), and this point is taken as the 0 point of the motor Angle.
     */
 
-    /* To get to understandable values,
-    1- multiply by 360
-    2- devide by 2^14
-    -> The data will be expressed as degrees from 0-360
-    -> apply the steps above on the data you receive from this function.
-    */
 
     this -> position        =   (
-                                (this -> data_.read_enc_response_[5]       )     +
-                                (this -> data_.read_enc_response_[6] << 8  )
+                                (static_cast<uint16_t>(this -> data_.read_enc_response_[5])       )     |
+                                (static_cast<uint16_t>(this -> data_.read_enc_response_[6]) << 8  )
                                 ) & this -> data_.encoder_mask_;
 
     this -> raw_position    =   (
-                                (this -> data_.read_enc_response_[7]       )     +
-                                (this -> data_.read_enc_response_[8] << 8  )
+                                (static_cast<uint16_t>(this -> data_.read_enc_response_[7])       )     |
+                                (static_cast<uint16_t>(this -> data_.read_enc_response_[8]) << 8  )
                                 ) & this -> data_.encoder_mask_;
 
     this -> position_offset =   (
-                                (this -> data_.read_enc_response_[9]       )     +
-                                (this -> data_.read_enc_response_[10] << 8 )
+                                (static_cast<uint16_t>(this -> data_.read_enc_response_[9] )      )     |
+                                (static_cast<uint16_t>(this -> data_.read_enc_response_[10]) << 8 )
                                 ) & this -> data_.encoder_mask_;
     
 }
 
 
-auto Base::setTemporaryPositionZero(std::uint16_t& offset) -> void{
+auto Base::setTemporaryPositionZero(std::uint16_t offset) -> void{
     /*The computer host sends the command to set the encoder Offset , 
     that the encoder Offset to be written is the type of std::uint16_t, and value range of the 14bit encoder is 0~16383.*/
     offset &= this -> data_.encoder_mask_;
@@ -98,14 +92,14 @@ auto Base::getMultiTurnAngle() -> void{
     negative value represents counter clockwise cumulative Angle, unit 0.01°/LSB.*/
 
     this -> multi_turn_angle  =     (
-                                    (this -> data_.read_multi_turn_response_[5]           ) +
-                                    (this -> data_.read_multi_turn_response_[6]   << 8    ) +
-                                    (this -> data_.read_multi_turn_response_[7]   << 16   ) +
-                                    (this -> data_.read_multi_turn_response_[8]   << 24   ) +
-                                    (this -> data_.read_multi_turn_response_[9]   << 32   ) +
-                                    (this -> data_.read_multi_turn_response_[10]  << 40   ) +
-                                    (this -> data_.read_multi_turn_response_[11]  << 48   ) +
-                                    (this -> data_.read_multi_turn_response_[12]  << 56   ) 
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[5])           ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[6])   << 8    ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[7])   << 16   ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[8])   << 24   ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[9])   << 32   ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[10])  << 40   ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[11])  << 48   ) |
+                                    (static_cast<int64_t>(this -> data_.read_multi_turn_response_[12])  << 56   ) 
                                     );
 }
 
@@ -122,10 +116,10 @@ auto Base::getSingleTurnAngle() -> void{
     and the value range is 0~36000*i-1(i:Reduction ratio).*/
 
     this -> single_turn_angle  =    (
-                                    (this -> data_.read_single_turn_response_[5]           ) +
-                                    (this -> data_.read_single_turn_response_[6]   << 8    ) +
-                                    (this -> data_.read_single_turn_response_[7]   << 16   ) +
-                                    (this -> data_.read_single_turn_response_[8]   << 24   ) 
+                                    (static_cast<uint32_t>(this -> data_.read_single_turn_response_[5])           ) |
+                                    (static_cast<uint32_t>(this -> data_.read_single_turn_response_[6])   << 8    ) |
+                                    (static_cast<uint32_t>(this -> data_.read_single_turn_response_[7])   << 16   ) |
+                                    (static_cast<uint32_t>(this -> data_.read_single_turn_response_[8])   << 24   ) 
                                     );
 }
 
