@@ -18,14 +18,14 @@ auto Base::getAcceleration() -> void{
     /*Acceleration parameters are included in the driver reply data. 
     The acceleration data is of int32_t type, with a unit of 1dps/s.*/
     this -> acceleration =  (
-                            (this -> data_.read_acc_response_[5]      )   +       // *(uint8_t *)(&Accel)
-                            (this -> data_.read_acc_response_[6] << 8 )   +       // *((uint8_t *)(&Accel)+1)
-                            (this -> data_.read_acc_response_[7] << 16)   +       // *((uint8_t *)(&Accel)+2)
-                            (this -> data_.read_acc_response_[8] << 24)           // *((uint8_t *)(&Accel)+3)
+                            (static_cast<int32_t>(this -> data_.read_acc_response_[5])      )   |       // *(uint8_t *)(&Accel)
+                            (static_cast<int32_t>(this -> data_.read_acc_response_[6]) << 8 )   |       // *((uint8_t *)(&Accel)+1)
+                            (static_cast<int32_t>(this -> data_.read_acc_response_[7]) << 16)   |       // *((uint8_t *)(&Accel)+2)
+                            (static_cast<int32_t>(this -> data_.read_acc_response_[8]) << 24)           // *((uint8_t *)(&Accel)+3)
                             );
 }
 
-auto Base::setAcceleration(uint32_t& acceleration) -> void{
+auto Base::setAcceleration(const std::int32_t& acceleration) -> void{
     /*The computer host sends the command to write acceleration parameters into RAM, 
     and the parameters will lose when power off. Acceleration data is int32_t type, unit 1dps/s.*/
     this -> data_.write_acc_cmd_[5] = ((acceleration      ) & 0xFF);      // *(uint8_t *)(&Accel)
