@@ -10,10 +10,10 @@ auto Base::closedLoopSpeedControl(const std::int32_t& value) -> void{
     /*The computer host sends this command to control the speed of the motor with a speedControl 
     of type int32_t corresponding to the actual speed of 0.01 DPS /LSB.*/
 
-    this -> data_.closed_loop_speed_cmd_[5] = ((value          ) & 0xFF);
-    this -> data_.closed_loop_speed_cmd_[6] = ((value >> 1     ) & 0xFF);
-    this -> data_.closed_loop_speed_cmd_[7] = ((value >> 2     ) & 0xFF);
-    this -> data_.closed_loop_speed_cmd_[8] = ((value >> 3     ) & 0xFF);
+    this -> data_.closed_loop_speed_cmd_[5] = ((value           ) & 0xFF);
+    this -> data_.closed_loop_speed_cmd_[6] = ((value >>  8     ) & 0xFF);
+    this -> data_.closed_loop_speed_cmd_[7] = ((value >> 16     ) & 0xFF);
+    this -> data_.closed_loop_speed_cmd_[8] = ((value >> 24     ) & 0xFF);
 
     this -> client_.calculateCheckSum(this -> data_.closed_loop_speed_cmd_, 5, 8, this -> data_.closed_loop_speed_cmd_[9]);
 
@@ -29,20 +29,20 @@ auto Base::closedLoopSpeedControl(const std::int32_t& value) -> void{
     this -> temperature = this -> data_.closed_loop_speed_response_[5];
 
     this -> torque    = (
-                        (this -> data_.closed_loop_speed_response_[6]            ) +
-                        (this -> data_.closed_loop_speed_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_speed_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_speed_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.closed_loop_speed_response_[8]            ) +
-                        (this -> data_.closed_loop_speed_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_speed_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_speed_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.closed_loop_speed_response_[10]           ) +
-                        (this -> data_.closed_loop_speed_response_[11] << 8      ) 
-                        );
+                        (static_cast<uint16_t>(this -> data_.closed_loop_speed_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_speed_response_[11]) << 8      ) 
+                        ) & this -> data_.encoder_mask_;
 }
 
