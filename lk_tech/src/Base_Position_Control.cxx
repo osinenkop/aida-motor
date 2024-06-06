@@ -57,20 +57,20 @@ auto Base::closedLoopMultiPositionControl(const std::int64_t& value) -> void{
     this -> temperature = this -> data_.closed_loop_multi_turn_position_1_response_[5];
 
     this -> torque    = (
-                        (this -> data_.closed_loop_multi_turn_position_1_response_[6]            ) +
-                        (this -> data_.closed_loop_multi_turn_position_1_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_1_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_1_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.closed_loop_multi_turn_position_1_response_[8]            ) +
-                        (this -> data_.closed_loop_multi_turn_position_1_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_1_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_1_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.closed_loop_multi_turn_position_1_response_[10]           ) +
-                        (this -> data_.closed_loop_multi_turn_position_1_response_[11] << 8      ) 
+                        (static_cast<uint16_t>(this -> data_.closed_loop_multi_turn_position_1_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_multi_turn_position_1_response_[11]) << 8      ) 
                         );
 }
 
@@ -110,20 +110,20 @@ auto Base::closedLoopMultiPositionControl(const std::int64_t& value, const std::
     this -> temperature = this -> data_.closed_loop_multi_turn_position_2_response_[5];
 
     this -> torque    = (
-                        (this -> data_.closed_loop_multi_turn_position_2_response_[6]            ) +
-                        (this -> data_.closed_loop_multi_turn_position_2_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_2_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_2_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.closed_loop_multi_turn_position_2_response_[8]            ) +
-                        (this -> data_.closed_loop_multi_turn_position_2_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_2_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_multi_turn_position_2_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.closed_loop_multi_turn_position_2_response_[10]           ) +
-                        (this -> data_.closed_loop_multi_turn_position_2_response_[11] << 8      ) 
+                        (static_cast<uint16_t>(this -> data_.closed_loop_multi_turn_position_2_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_multi_turn_position_2_response_[11]) << 8      ) 
                         );
 }
 
@@ -152,20 +152,20 @@ auto Base::closedLoopSinglePositionControl(const std::uint16_t& value, const std
     this -> temperature = this -> data_.closed_loop_single_turn_position_1_response_[5];
 
     this -> torque    = (
-                        (this -> data_.closed_loop_single_turn_position_1_response_[6]            ) +
-                        (this -> data_.closed_loop_single_turn_position_1_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_1_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_1_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.closed_loop_single_turn_position_1_response_[8]            ) +
-                        (this -> data_.closed_loop_single_turn_position_1_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_1_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_1_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.closed_loop_single_turn_position_1_response_[10]           ) +
-                        (this -> data_.closed_loop_single_turn_position_1_response_[11] << 8      ) 
+                        (static_cast<uint16_t>(this -> data_.closed_loop_single_turn_position_1_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_single_turn_position_1_response_[11]) << 8      ) 
                         );
 }
 
@@ -180,10 +180,10 @@ auto Base::closedLoopSinglePositionControl(const std::uint16_t& value, const std
     this -> data_.closed_loop_single_turn_position_2_cmd_[6]   =  ((value             ) & 0xFF);
     this -> data_.closed_loop_single_turn_position_2_cmd_[7]   =  ((value   >> 8      ) & 0xFF);
 
-    this -> data_.closed_loop_single_turn_position_2_cmd_[9]   =  ((value            ) & 0xFF);
-    this -> data_.closed_loop_single_turn_position_2_cmd_[10]  =  ((value   >> 8     ) & 0xFF);
-    this -> data_.closed_loop_single_turn_position_2_cmd_[11]  =  ((value   >> 16    ) & 0xFF);
-    this -> data_.closed_loop_single_turn_position_2_cmd_[12]  =  ((value   >> 24    ) & 0xFF);
+    this -> data_.closed_loop_single_turn_position_2_cmd_[9]   =  ((max_speed            ) & 0xFF);
+    this -> data_.closed_loop_single_turn_position_2_cmd_[10]  =  ((max_speed   >> 8     ) & 0xFF);
+    this -> data_.closed_loop_single_turn_position_2_cmd_[11]  =  ((max_speed   >> 16    ) & 0xFF);
+    this -> data_.closed_loop_single_turn_position_2_cmd_[12]  =  ((max_speed   >> 24    ) & 0xFF);
     this -> client_.calculateCheckSum(this -> data_.closed_loop_single_turn_position_2_cmd_, 5, 12, this -> data_.closed_loop_single_turn_position_2_cmd_[13]);
 
     this -> client_.send(this -> data_.closed_loop_single_turn_position_2_cmd_);
@@ -199,20 +199,20 @@ auto Base::closedLoopSinglePositionControl(const std::uint16_t& value, const std
     this -> temperature = this -> data_.closed_loop_single_turn_position_2_response_[5];
 
     this -> torque    = (
-                        (this -> data_.closed_loop_single_turn_position_2_response_[6]            ) +
-                        (this -> data_.closed_loop_single_turn_position_2_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_2_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_2_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.closed_loop_single_turn_position_2_response_[8]            ) +
-                        (this -> data_.closed_loop_single_turn_position_2_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_2_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_single_turn_position_2_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.closed_loop_single_turn_position_2_response_[10]           ) +
-                        (this -> data_.closed_loop_single_turn_position_2_response_[11] << 8      ) 
+                        (static_cast<uint16_t>(this -> data_.closed_loop_single_turn_position_2_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_single_turn_position_2_response_[11]) << 8      ) 
                         );
 }
 
@@ -296,23 +296,22 @@ auto Base::closedLoopIncrementalPositionControl(const std::int32_t& value, const
     3.  Motor speed (int16_t type, 1dps/LSB).
     4.  Encoder position value (uint16_t type, 14bit encoder value range 0~16383)*/
 
-
     this -> temperature = this -> data_.closed_loop_incremental_turn_position_2_response_[5];
 
     this -> torque    = (
-                        (this -> data_.closed_loop_incremental_turn_position_2_response_[6]            ) +
-                        (this -> data_.closed_loop_incremental_turn_position_2_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_incremental_turn_position_2_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_incremental_turn_position_2_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.closed_loop_incremental_turn_position_2_response_[8]            ) +
-                        (this -> data_.closed_loop_incremental_turn_position_2_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_incremental_turn_position_2_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_incremental_turn_position_2_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.closed_loop_incremental_turn_position_2_response_[10]           ) +
-                        (this -> data_.closed_loop_incremental_turn_position_2_response_[11] << 8      ) 
+                        (static_cast<uint16_t>(this -> data_.closed_loop_incremental_turn_position_2_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_incremental_turn_position_2_response_[11]) << 8      ) 
                         );
 }
