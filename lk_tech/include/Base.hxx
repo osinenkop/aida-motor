@@ -9,13 +9,7 @@
 // Test Checks
 #include <cassert>
 
-struct productInfo
-{
-std::uint8_t driver_name [20]; // Driver name
-std::uint8_t motor_name [20]; // Name of motor
-std::uint8_t hardware_version; // drive the hardware version
-std::uint8_t firmware_version; // firmware version
-};
+
 
 class Base{
     public:
@@ -32,11 +26,11 @@ class Base{
 
         auto initAccelerationCmd() -> void;
         auto getAcceleration() -> void;
-        auto setAcceleration(std::uint32_t&) -> void;
+        auto setAcceleration(const std::int32_t&) -> void;
 
         auto initPositionCmd() -> void;
         auto getPosition() -> void;
-        auto setTemporaryPositionZero(std::uint16_t&) -> void;
+        auto setTemporaryPositionZero(std::uint16_t) -> void;
         auto setPermanentPositionZero() -> void;
         auto getMultiTurnAngle() -> void;
         auto getSingleTurnAngle() -> void;
@@ -67,17 +61,21 @@ class Base{
         // auto closedLoopIncrementalPositionControl(const std::int32_t&) -> void;  /*NOT WORKING*/
         auto closedLoopIncrementalPositionControl(const std::int32_t&, const std::uint32_t&) -> void;
 
-    private:
-        PortHandler client_;
-        Data data_;
 
     public:
         std::uint8_t device_id_;
-        productInfo product_info;
+        ProductInfo product_info;
+        
+    private:
+        PortHandler client_;
+        Command data_;
+
+    
+
         
 
     public:
-        std::array<std::uint8_t, 6> pid_value;
+        PID pid_value;
         int32_t acceleration{};
         std::uint16_t raw_position{}, position{}, position_offset{};
         std::int64_t multi_turn_angle{};
