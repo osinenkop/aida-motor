@@ -33,22 +33,22 @@ auto Base::openLoopTorqueControl(const std::int16_t& value) -> void{
 
     this -> temperature = this -> data_.open_loop_torque_response_[5];
 
-    this -> power     = (
-                        (this -> data_.open_loop_torque_response_[6]            ) +
-                        (this -> data_.open_loop_torque_response_[7] << 8       ) 
+    this -> torque    = (
+                        (static_cast<int16_t>(this -> data_.open_loop_torque_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.open_loop_torque_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.open_loop_torque_response_[8]            ) +
-                        (this -> data_.open_loop_torque_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.open_loop_torque_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.open_loop_torque_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.open_loop_torque_response_[10]           ) +
-                        (this -> data_.open_loop_torque_response_[11] << 8      ) 
-                        );
+                        (static_cast<uint16_t>(this -> data_.open_loop_torque_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.open_loop_torque_response_[11]) << 8      ) 
+                        ) & this -> data_.encoder_mask_;
 }
 
 
@@ -77,19 +77,19 @@ auto Base::closedLoopTorqueControl(const std::int16_t& value) -> void{
     this -> temperature = this -> data_.open_loop_torque_response_[5];
 
     this -> torque    = (
-                        (this -> data_.open_loop_torque_response_[6]            ) +
-                        (this -> data_.open_loop_torque_response_[7] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_torque_response_[6])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_torque_response_[7]) << 8       ) 
                         );
 
 
     this -> speed     = (
-                        (this -> data_.open_loop_torque_response_[8]            ) +
-                        (this -> data_.open_loop_torque_response_[9] << 8       ) 
+                        (static_cast<int16_t>(this -> data_.closed_loop_torque_response_[8])            ) |
+                        (static_cast<int16_t>(this -> data_.closed_loop_torque_response_[9]) << 8       ) 
                         );
 
 
     this -> position  = (
-                        (this -> data_.open_loop_torque_response_[10]           ) +
-                        (this -> data_.open_loop_torque_response_[11] << 8      ) 
-                        );
+                        (static_cast<uint16_t>(this -> data_.closed_loop_torque_response_[10])           ) |
+                        (static_cast<uint16_t>(this -> data_.closed_loop_torque_response_[11]) << 8      ) 
+                        ) & this -> data_.encoder_mask_;
 }
