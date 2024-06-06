@@ -5,8 +5,7 @@
 #include <vector>
 #include <string>
 
-struct Data{
-
+struct Command{
     std::vector<std::uint8_t> model_cmd_;
     std::vector<std::uint8_t> model_response_;
 
@@ -84,5 +83,35 @@ struct Data{
     std::vector<std::uint8_t> closed_loop_incremental_turn_position_2_response_;
 };
 
+
+struct TemperatureVoltage{
+    float temperature;
+    float voltage;
+    std::uint8_t error_state;
+};
+
+struct TorqueSpeedPose{
+    float torque;
+    float speed;
+    float position;
+};
+
+struct PhaseCurrent{
+    float phase_a_current, phase_b_current, phase_c_current;
+};
+
+struct ProductInfo
+{
+    std::uint8_t driver_name [20]; // Driver name
+    std::uint8_t motor_name [20]; // Name of motor
+    std::uint8_t hardware_version; // drive the hardware version
+    std::uint8_t firmware_version; // firmware version
+};
+
+struct PID{
+    std::uint8_t position_Kp, position_Ki;
+    std::uint8_t  speed_Kp, speed_Ki;
+    std::uint8_t  torque_Kp, torque_Ki;
+};
 
 #endif
