@@ -20,12 +20,12 @@ auto Base::getPID() -> void{
     this -> client_.receive(this -> data_.read_pid_response_);
 
     
-    this -> pid_value[0] = this -> data_.read_pid_response_[5];     // Position_Kp
-    this -> pid_value[1] = this -> data_.read_pid_response_[6];     // Position_Ki
-    this -> pid_value[2] = this -> data_.read_pid_response_[7];     // Speed_Kp
-    this -> pid_value[3] = this -> data_.read_pid_response_[8];     // Speed_Ki
-    this -> pid_value[4] = this -> data_.read_pid_response_[9];     // Torque_Kp
-    this -> pid_value[5] = this -> data_.read_pid_response_[10];    // Torque_Ki
+    this -> pid_value.position_Kp = this -> data_.read_pid_response_[5];     // Position_Kp
+    this -> pid_value.position_Ki = this -> data_.read_pid_response_[6];     // Position_Ki
+    this -> pid_value.speed_Kp    = this -> data_.read_pid_response_[7];     // Speed_Kp
+    this -> pid_value.speed_Ki    = this -> data_.read_pid_response_[8];     // Speed_Ki
+    this -> pid_value.torque_Kp   = this -> data_.read_pid_response_[9];     // Torque_Kp
+    this -> pid_value.torque_Ki   = this -> data_.read_pid_response_[10];    // Torque_Ki
 }
 
 
@@ -44,7 +44,6 @@ auto Base::setTemporaryPID(const std::array<uint8_t, 6>& pid) -> void{
     this -> client_.send(this -> data_.write_pid_ram_cmd_);
     this -> getPID();
 }
-
 
 auto Base::setPermanentPID(const std::array<uint8_t, 6>& pid) -> void{
     /*The computer host sends the command to write the PID parameter to RAM. It is still valid when power off.*/
