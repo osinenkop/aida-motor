@@ -8,22 +8,14 @@ set(THREADS_HAVE_PTHREAD_ARG 1)
 find_package(Threads REQUIRED)
 
 
-find_package(PkgConfig)
-# pkg_check_modules(SERIAL libserial)
 find_package(CppLinuxSerial REQUIRED)
-
-include_directories(${LibSerial_INCLUDE_DIRS})
-
-find_package(Boost REQUIRED COMPONENTS system)
 
 add_executable(
     ${PROJECT_NAME} 
     main.cxx 
     PortHandler.hxx 
     PortHandler.cxx 
-
-    Motor.hxx
-    # Motor.cxx
+    
 
     Base.hxx 
     Base.cxx 
@@ -36,6 +28,10 @@ add_executable(
     Base_Torque_Control.cxx
     Base_Speed_Control.cxx
     Base_Position_Control.cxx
+
+    Motor.hxx
+    Motor.cxx
+    # Motor_Utility.cxx
 
 
     )
