@@ -1,6 +1,7 @@
 #include "Motor.hxx"
 
 #include <cstring>
+#include <algorithm>
 
 Motor::Motor(std::string port_address, std::uint8_t device_id): base{Base(port_address, device_id)}{}
 
@@ -38,19 +39,11 @@ auto Motor::getPID() -> const PID&{
     return this -> base.pid_value;
 }
 
-bool is_valid_pid(const PID& pid_value){
-    return  pid_value.position_Kp >= 0 and pid_value.position_Kp <= 255 &
-            pid_value.position_Ki >= 0 and pid_value.position_Ki <= 255 &
-            pid_value.speed_Kp >= 0 and pid_value.speed_Kp <= 255 &
-            pid_value.speed_Ki >= 0 and pid_value.speed_Ki <= 255 &
-            pid_value.torque_Kp >= 0 and pid_value.torque_Kp <= 255 &
-            pid_value.torque_Ki >= 0 and pid_value.torque_Ki <= 255;
-}
 
 auto Motor::setPID(const PID& pid_value) -> void{
-    if(is_valid_pid(pid_value)){this -> base.setTemporaryPID({  pid_value.position_Kp, pid_value.position_Ki,
-                                                                pid_value.speed_Kp, pid_value.speed_Ki,
-                                                                pid_value.torque_Kp, pid_value.torque_Ki});} // values are between 0~255}
+        this -> base.setTemporaryPID({  pid_value.position_Kp, pid_value.position_Ki,
+                                        pid_value.speed_Kp,    pid_value.speed_Ki,
+                                        pid_value.torque_Kp,   pid_value.torque_Ki}); // values are between 0~255}
 }
 
 auto Motor::getAcc() -> std::int32_t&{
@@ -60,6 +53,11 @@ auto Motor::getAcc() -> std::int32_t&{
 }
 
 auto Motor::setAcc(const std::int32_t& value) -> void{
+    /*Do it Once only as it writes the data to the RAM of the motor*/
+    this -> base.setAcceleration(value); // Unit: 1dps/s
+}
+
+auto Motor::setAcc(const std::int32_t&& value) -> void{
     /*Do it Once only as it writes the data to the RAM of the motor*/
     this -> base.setAcceleration(value); // Unit: 1dps/s
 }
@@ -91,17 +89,15 @@ auto Motor::getCurrent() -> void{
 
 auto Motor::torqueControl(const float& value) -> void{
     // Unit: Amps
-    if (value >= -this -> current_limit and value <= this -> current_limit){
-        this -> base.closedLoopTorqueControl(this -> convertTorque<float, std::int16_t>(value, false));
-        this -> collectTorqueSpeedPoseData();
-    }
+    // The value will be clamped to the range ±torque_limit
+    this -> base.closedLoopTorqueControl(this -> convertTorque<float, std::int16_t>(std::clamp(value, -this -> torque_limit, this -> torque_limit), false));
+    this -> collectTorqueSpeedPoseData();
 }
 
 auto Motor::speedControl(const float& value) -> void{
-    // Unit: Degree/Sec
-    this -> base.closedLoopSpeedControl(this -> convertSpeed<float, std::int32_t>(value, false));
+    // Unit:  Rounds/Sec
+    this -> base.closedLoopSpeedControl(this -> convertSpeed<float, std::int32_t>(std::clamp(value, -this -> speed_limit, this -> speed_limit), false));
     this -> collectTorqueSpeedPoseData();
-
 }
 
 auto Motor::stop() -> void{
@@ -141,7 +137,7 @@ auto Motor::convertTorque(const In& value, bool&& from_motor) -> Out{
 template <typename In, typename Out>
 auto Motor::convertSpeed(const In& value, bool&& from_motor) -> Out{
     if (from_motor) {return static_cast<Out>(value) / 360.0 / this -> reduction_ratio;}
-    else {return static_cast<Out>(value * 100.0 * this -> reduction_ratio);} // Unit: Degree/Sec
+    else {return static_cast<Out>(value * this -> reduction_ratio * 100.0 * 360.0);} // Unit: Rounds/Sec
 }
 
 // Pose
