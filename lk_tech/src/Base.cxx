@@ -2,7 +2,7 @@
 
 
 Base::~Base(){
-    // this -> stop();
+    this -> stop();
     // this -> shutdown();
 }
 
