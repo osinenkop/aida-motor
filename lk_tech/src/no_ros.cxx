@@ -5,21 +5,20 @@
 #include <cstdint>
 #include <algorithm>
 #include <vector>
-#include <exception>
 
 
 struct StudentController{
     StudentController(std::string port_address, std::uint8_t device_id): motor_{Motor(port_address, device_id)}{
         setHardwarePID();
-        setHardwareAcc(0);
+        setHardwareAcc();
     }
 
     auto setTorque(const float& value) -> void{
         motor_.torqueControl(value);
-        temperature_ = motor_.temperature;
-        torque_ = motor_.torque;
-        speed_ = motor_.speed;
-        position_ = motor_.position;
+        temperature_ = motor_.temperature;      // Unit: celcius
+        torque_ = motor_.torque;                // Unit: Amp,       Range: -18~18
+        speed_ = motor_.speed;                  // Unit: rps,       Range: -5.4~5.4
+        position_ = motor_.position;            // Unit: degree,    Range: 0.0~359.99
     }
 
     
@@ -27,8 +26,9 @@ struct StudentController{
     // The main function(torqueControl). Everything happens here...!
     /***************************************/
     auto torqueControl() -> void{
-            float value{1};
-            setTorque(value);
+        /*Unit: Amps, Range: -18~18*/
+        float value{1};
+        setTorque(value);
     }
 
     auto stop() -> void{
@@ -38,7 +38,7 @@ struct StudentController{
     private:
         auto setHardwarePID() -> void{
             // Values Should be between 0 and 255 
-            // Don't use this member function in any loop as it writes to the motor's buffer and is time consuming.
+            // Don't use this member function in any loop as it writes to the motor's memory and is time consuming.
             pid_.position_Kp    = 100;
             pid_.position_Ki    = 100;
             pid_.speed_Kp       = 50;
@@ -51,9 +51,10 @@ struct StudentController{
             std::memcpy(&pid_, &motor_.pid, sizeof(pid_));
         }
 
-        auto setHardwareAcc(const std::int32_t& value) -> void{
-            // Don't use this member function in any loop as it writes to the motor's buffer and is time consuming.
-            motor_.setAcc(value);
+        auto setHardwareAcc() -> void{
+            /*Don't use this member function in any loop as it writes to the motor's memory and is time consuming.*/ 
+            /*Unit: 1dps/s */
+            motor_.setAcc(100);
             acceleration_ = motor_.acceleration;
         }
 
