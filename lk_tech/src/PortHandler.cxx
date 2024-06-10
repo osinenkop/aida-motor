@@ -1,13 +1,13 @@
 #include "PortHandler.hxx"
 
-using namespace mn::CppLinuxSerial;
+using namespace CppLinuxSerial;
 
 PortHandler::PortHandler(std::string port_address){
     this -> setPort(port_address);
 }
 
 auto PortHandler::setPort(std::string port_address) -> void{
-    this -> serial_port_ = SerialPort(port_address, BaudRate::B_115200, NumDataBits::EIGHT, Parity::NONE, NumStopBits::ONE);
+    this -> serial_port_ = CppLinuxSerial::SerialPort(port_address, BaudRate::B_115200, NumDataBits::EIGHT, Parity::NONE, NumStopBits::ONE);
     this -> serial_port_.SetTimeout(10); // Block for up to 10ms to receive data
 	this -> serial_port_.Open();
 }
