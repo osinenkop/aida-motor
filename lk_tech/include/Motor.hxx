@@ -16,6 +16,7 @@ class Motor{
         auto getPID() -> const PID&;
 
         auto setAcc(const std::int32_t&) -> void;
+        auto setAcc(const std::int32_t&&) -> void;
         auto getAcc() -> std::int32_t&;
 
         auto setPositionOffset(const float&) -> void;
@@ -71,7 +72,8 @@ class Motor{
     const std::uint8_t reduction_ratio{8};
     const std::uint16_t fourteen_bit_resolution{(1 << 14)};
 
-    const float current_limit{18};
+    const float torque_limit{18}; // Amps
+    const float speed_limit{5.4}; // Rounds/Sec
 
 };
 
