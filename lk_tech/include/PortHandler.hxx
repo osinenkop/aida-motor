@@ -1,8 +1,7 @@
 #ifndef __PORT_HANDLER_HXX__
 #define __PORT_HANDLER_HXX__
 
-#include <CppLinuxSerial/SerialPort.hpp>
-using namespace mn::CppLinuxSerial;
+#include "SerialPort.hpp"
 
 #include <vector>
 #include <string>
@@ -20,7 +19,7 @@ class PortHandler{
         auto calculateCheckSum(const std::vector<uint8_t>&, uint8_t&&, uint8_t&&, uint8_t& ) -> void;
 
     private:
-        SerialPort serial_port_;
+        CppLinuxSerial::SerialPort serial_port_;
         uint16_t sum_;
         uint8_t index_;
         std::string port_address_;
