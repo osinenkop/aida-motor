@@ -38,14 +38,20 @@ auto Motor::getPID() -> const PID&{
     return this -> base.pid_value;
 }
 
-auto Motor::setPID(const std::array<std::uint8_t, 6>& value) -> void{
-    this -> base.setTemporaryPID(value); // values are between 0~255
+bool is_valid_pid(const PID& pid_value){
+    return  pid_value.position_Kp >= 0 and pid_value.position_Kp <= 255 &
+            pid_value.position_Ki >= 0 and pid_value.position_Ki <= 255 &
+            pid_value.speed_Kp >= 0 and pid_value.speed_Kp <= 255 &
+            pid_value.speed_Ki >= 0 and pid_value.speed_Ki <= 255 &
+            pid_value.torque_Kp >= 0 and pid_value.torque_Kp <= 255 &
+            pid_value.torque_Ki >= 0 and pid_value.torque_Ki <= 255;
 }
 
-auto Motor::setPID(const std::array<std::uint8_t, 6>&& value) -> void{
-    this -> base.setTemporaryPID(value); // values are between 0~255
+auto Motor::setPID(const PID& pid_value) -> void{
+    if(is_valid_pid(pid_value)){this -> base.setTemporaryPID({  pid_value.position_Kp, pid_value.position_Ki,
+                                                                pid_value.speed_Kp, pid_value.speed_Ki,
+                                                                pid_value.torque_Kp, pid_value.torque_Ki});} // values are between 0~255}
 }
-
 
 auto Motor::getAcc() -> std::int32_t&{
     /*Do it Once only*/
@@ -96,6 +102,10 @@ auto Motor::speedControl(const float& value) -> void{
     this -> base.closedLoopSpeedControl(this -> convertSpeed<float, std::int32_t>(value, false));
     this -> collectTorqueSpeedPoseData();
 
+}
+
+auto Motor::stop() -> void{
+    this -> base.stop();
 }
 
 /*Complex and I do not recommend it*/
