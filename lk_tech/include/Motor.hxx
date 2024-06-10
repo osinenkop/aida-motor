@@ -12,8 +12,7 @@ class Motor{
     public:
         Motor(std::string, std::uint8_t);
         ~Motor();
-        auto setPID(const std::array<std::uint8_t, 6>&&) -> void;
-        auto setPID(const std::array<std::uint8_t, 6>&) -> void;
+        auto setPID(const PID&) -> void;
         auto getPID() -> const PID&;
 
         auto setAcc(const std::int32_t&) -> void;
@@ -29,7 +28,7 @@ class Motor{
         auto positionControl(const float&, const float&) -> void;
 
         auto getProductInfo() -> const std::string&;
-
+        auto stop() -> void;
         
 
     private:
