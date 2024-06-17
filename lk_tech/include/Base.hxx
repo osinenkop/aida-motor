@@ -10,7 +10,6 @@
 #include <cassert>
 
 
-
 class Base{
     public:
         Base(std::string, std::uint8_t);
@@ -69,13 +68,9 @@ class Base{
     private:
         PortHandler client_;
         Command data_;
-
     
-
-        
-
     public:
-        PID pid_value;
+        MOTOR_PID pid_value;
         int32_t acceleration{};
         std::uint16_t raw_position{}, position{}, position_offset{};
         std::int64_t multi_turn_angle{};
