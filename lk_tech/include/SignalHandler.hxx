@@ -20,7 +20,6 @@ public:
     template <typename F>
     void run(F&& func) {
         signal(SIGINT, signalHandler);
-        
         while (!stopRequested) {
             func();
         }
