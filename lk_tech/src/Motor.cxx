@@ -3,9 +3,21 @@
 #include <cstring>
 #include <algorithm>
 
-Motor::Motor(std::string port_address, std::uint8_t device_id): base{Base(port_address, device_id)}{}
+Motor::Motor(std::string port_address, std::uint8_t device_id, bool debug): base{Base(port_address, device_id)}, debug_{debug}{
+    if(this -> exists() and (not this -> debug_)){this -> base.turnOn();}
+}
 
-Motor::~Motor(){}
+Motor::~Motor(){
+    if (not this -> debug_){
+        this -> stop();
+        this -> shutdown();
+    }
+}
+
+auto Motor::exists() -> bool{
+    this -> model_name_exist = (this -> getProductInfo().size() > 0);
+    return (this -> model_name_exist)? this -> model_name_exist : this -> getProductInfo().size() > 0;
+}
 
 template <typename T>
 void removeSpace(std::string& a, const T b, int&& n, int&& j){
@@ -34,13 +46,13 @@ auto Motor::getProductInfo() -> const std::string&{
 }
 
 
-auto Motor::getPID() -> const PID&{
+auto Motor::getPID() -> const MOTOR_PID&{
     this -> base.getPID(); // values are between 0-255
     return this -> base.pid_value;
 }
 
 
-auto Motor::setPID(const PID& pid_value) -> void{
+auto Motor::setPID(const MOTOR_PID& pid_value) -> void{
         this -> base.setTemporaryPID({  pid_value.position_Kp, pid_value.position_Ki,
                                         pid_value.speed_Kp,    pid_value.speed_Ki,
                                         pid_value.torque_Kp,   pid_value.torque_Ki}); // values are between 0~255}
@@ -90,18 +102,22 @@ auto Motor::getCurrent() -> void{
 auto Motor::torqueControl(const float& value) -> void{
     // Unit: Amps
     // The value will be clamped to the range ±torque_limit
-    this -> base.closedLoopTorqueControl(this -> convertTorque<float, std::int16_t>(std::clamp(value, -this -> torque_limit, this -> torque_limit), false));
+    this -> base.closedLoopTorqueControl(this -> convertTorque<float, std::int16_t>(std::clamp<float>(value, -this -> torque_limit, this -> torque_limit), false));
     this -> collectTorqueSpeedPoseData();
 }
 
 auto Motor::speedControl(const float& value) -> void{
     // Unit:  Rounds/Sec
-    this -> base.closedLoopSpeedControl(this -> convertSpeed<float, std::int32_t>(std::clamp(value, -this -> speed_limit, this -> speed_limit), false));
+    this -> base.closedLoopSpeedControl(this -> convertSpeed<float, std::int32_t>(std::clamp<float>(value, -this -> speed_limit, this -> speed_limit), false));
     this -> collectTorqueSpeedPoseData();
 }
 
 auto Motor::stop() -> void{
     this -> base.stop();
+}
+
+auto Motor::shutdown() -> void{
+    this -> base.shutdown();
 }
 
 /*Complex and I do not recommend it*/
@@ -115,7 +131,7 @@ auto Motor::stop() -> void{
 auto Motor::collectTorqueSpeedPoseData() -> void{
         this -> temperature = this -> base.temperature; // Unit: 1 centigrade
         this -> torque      = this -> convertTorque<std::int16_t, float>(this -> base.torque, true); // Unit: Amp, Range: -33~33
-        this -> speed       = this -> convertSpeed<std::int16_t, float>(this -> base.speed, true); // Unit: rps, Range: -5.4~5.4
+        this -> speed       = this -> convertSpeed<std::int16_t, float>(this -> base.speed, true); // Unit: rounds/s, Range: -5.4~5.4
         this -> position    = this -> convertPosition<std::uint16_t, float>(this -> base.position, true); // Unit: degree, Range: 0~359.99
 }
 
