@@ -10,10 +10,12 @@
 
 class Motor{
     public:
-        Motor(std::string, std::uint8_t);
+        Motor(std::string, std::uint8_t, bool debug = true);
         ~Motor();
-        auto setPID(const PID&) -> void;
-        auto getPID() -> const PID&;
+        auto exists() -> bool;
+
+        auto setPID(const MOTOR_PID&) -> void;
+        auto getPID() -> const MOTOR_PID&;
 
         auto setAcc(const std::int32_t&) -> void;
         auto setAcc(const std::int32_t&&) -> void;
@@ -30,6 +32,7 @@ class Motor{
 
         auto getProductInfo() -> const std::string&;
         auto stop() -> void;
+        auto shutdown() -> void;
         
 
     private:
@@ -49,7 +52,7 @@ class Motor{
         
     public:
         Base base;
-        PID pid;
+        MOTOR_PID pid;
         std::string model_name;
 
         float temperature{};
@@ -65,15 +68,18 @@ class Motor{
 
         std::string port_address;
         uint8_t device_id;
+        bool status;
 
     private:
-    bool model_name_exist{};
-    const float LSB{5.2 / (1 << 14)};
-    const std::uint8_t reduction_ratio{8};
-    const std::uint16_t fourteen_bit_resolution{(1 << 14)};
+        bool model_name_exist{};
+        const float LSB{5.2 / (1 << 14)};
+        const std::uint8_t reduction_ratio{8};
+        const std::uint16_t fourteen_bit_resolution{(1 << 14)};
 
-    const float torque_limit{18}; // Amps
-    const float speed_limit{5.4}; // Rounds/Sec
+        const float torque_limit{18}; // Amps
+        const float speed_limit{5.4}; // Rounds/Sec
+
+        bool debug_;
 
 };
 
