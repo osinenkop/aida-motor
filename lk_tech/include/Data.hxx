@@ -108,7 +108,7 @@ struct ProductInfo
     std::uint8_t firmware_version; // firmware version
 };
 
-struct PID{
+struct MOTOR_PID{
     std::uint8_t position_Kp, position_Ki;
     std::uint8_t  speed_Kp, speed_Ki;
     std::uint8_t  torque_Kp, torque_Ki;
