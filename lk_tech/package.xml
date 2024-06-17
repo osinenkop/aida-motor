@@ -5,12 +5,17 @@
   <version>0.0.0</version>
   <description>LK_TECH Motor ROS2 Package</description>
   <maintainer email="sinamoghimi73@gmail.com">aida</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+
+  <depend> rclcpp </depend>
+  <exec_depend> std_msgs </exec_depend>
+  <exec_depend> sensor_msgs </exec_depend>
+  <exec_depend> image_transport </exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
