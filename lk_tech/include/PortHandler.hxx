@@ -1,7 +1,7 @@
 #ifndef __PORT_HANDLER_HXX__
 #define __PORT_HANDLER_HXX__
 
-#include "SerialPort.hpp"
+#include "SerialPort.hxx"
 
 #include <vector>
 #include <string>
