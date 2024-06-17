@@ -74,7 +74,7 @@ auto Base::closedLoopTorqueControl(const std::int16_t& value) -> void{
     4. Encoder position value (uint16_t type, 14bit encoder value range 0~16383).
     */
 
-    this -> temperature = this -> data_.open_loop_torque_response_[5];
+    this -> temperature = this -> data_.closed_loop_torque_response_[5];
 
     this -> torque    = (
                         (static_cast<int16_t>(this -> data_.closed_loop_torque_response_[6])            ) |
