@@ -13,9 +13,11 @@
   <test_depend>ament_lint_common</test_depend>
 
   <depend> rclcpp </depend>
-  <exec_depend> std_msgs </exec_depend>
-  <exec_depend> sensor_msgs </exec_depend>
-  <exec_depend> image_transport </exec_depend>
+  <exec_depend> std_msgs </exec_depend> 
+  <depend>geometry_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+
 
   <export>
     <build_type>ament_cmake</build_type>
