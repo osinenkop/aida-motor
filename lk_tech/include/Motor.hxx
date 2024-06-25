@@ -4,9 +4,11 @@
 #include <string>
 #include <cstdint>
 #include <cassert>
+#include <cmath>
 #include "Base.hxx"
 #include "Data.hxx"
 
+#include <numbers> // pi
 
 class Motor{
     public:
@@ -48,7 +50,7 @@ class Motor{
         auto convertPosition(const In&, bool&&) -> Out;
 
         auto collectTorqueSpeedPoseData() -> void;
-        auto sgn(const float&) -> bool;
+        auto clockWise(const float&) -> bool;
         
     public:
         Base base;
@@ -75,10 +77,15 @@ class Motor{
         const float LSB{5.2 / (1 << 14)};
         const std::uint8_t reduction_ratio{8};
         const std::uint16_t fourteen_bit_resolution{(1 << 14)};
+        const std::uint16_t thirteen_bit_resolution{(1 << 13)};
+
+        std::int32_t shifted_value{}, shifted_prev_value{};
 
         const float torque_limit{18}; // Amps
         const float speed_limit{5.4}; // Rounds/Sec
 
+        std::int16_t encoder_counter{0};
+        std::uint16_t old_encoder_value{};
         bool debug_;
 
 };
