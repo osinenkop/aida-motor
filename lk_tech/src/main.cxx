@@ -19,17 +19,15 @@ int main(int argc, char* argv[]){
     rclcpp::init(argc, argv);
 
     std::string node_name(getNodeName(argc, argv));
-    // std::string node_name{"Helloooo"};
     std::shared_ptr<MinimalMotor> md{std::make_shared<MinimalMotor>(node_name)};
-  // try {
-  //   md->warmUp();
-  //   md->loopForEver();
-  //   std::clog << "spin" << std::endl;
-  //   rclcpp::spin(md);
-  // } catch (std::exception &e) {
-  //   std::cerr << "Caught Error " << e.what() << std::endl;
-  //   rclcpp::shutdown();
-  // }
-  rclcpp::shutdown();
+  try {
+    md->warmUp();
+    std::clog << "spin" << std::endl;
+    rclcpp::spin(md);
+  } catch (std::exception &e) {
+    std::cerr << "Caught Error " << e.what() << std::endl;
+    rclcpp::shutdown();
+  }
+    rclcpp::shutdown();
   return 0;
 }
