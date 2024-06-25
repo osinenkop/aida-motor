@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.22)
 project(lk_tech)
+
+set(CMAKE_CXX_STANDARD 20)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -10,6 +12,9 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -47,12 +52,18 @@ ament_target_dependencies(
   rclcpp
   std_msgs
   sensor_msgs
+
+  geometry_msgs
+  tf2
+  tf2_ros
+
 )
 
 
 target_link_libraries(
   ${PROJECT_NAME}_motor
   ${DEPENDENCIES}
+  ${tf2_ros_LIBRARIES}
   rcl::rcl
   rclcpp::rclcpp
 
