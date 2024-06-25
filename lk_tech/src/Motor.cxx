@@ -123,7 +123,7 @@ auto Motor::shutdown() -> void{
 /*Complex and I do not recommend it*/
 // auto Motor::positionControl(const float& value, const float& speed) -> void{
 //     // Unit: Degree
-//     this -> base.closedLoopSinglePositionControl(this -> convertPosition<float, std::int64_t>(value, false), this -> sgn(value), this -> convertSpeed<float, std::uint32_t>(value, false));
+//     this -> base.closedLoopSinglePositionControl(this -> convertPosition<float, std::int64_t>(value, false), this -> clockWise(value), this -> convertSpeed<float, std::uint32_t>(value, false));
 //     this -> collectTorqueSpeedPoseData();
 // }
 
@@ -133,14 +133,14 @@ auto Motor::collectTorqueSpeedPoseData() -> void{
         this -> torque      = this -> convertTorque<std::int16_t, float>(this -> base.torque, true); // Unit: Amp, Range: -33~33
         this -> speed       = this -> convertSpeed<std::int16_t, float>(this -> base.speed, true); // Unit: rounds/s, Range: -5.4~5.4
         this -> position    = this -> convertPosition<std::uint16_t, float>(this -> base.position, true); // Unit: degree, Range: 0~359.99
+        // this -> position = this -> getPosition();
 }
-
 
 auto Motor::convertCurrent(const std::int16_t& value) -> float{
     return static_cast<float>(value) / 64.0;
 }
 
-auto Motor::sgn(const float& value) -> bool{
+auto Motor::clockWise(const float& value) -> bool{
     return value <= 0;
 }
 
@@ -159,7 +159,14 @@ auto Motor::convertSpeed(const In& value, bool&& from_motor) -> Out{
 // Pose
 template <typename In, typename Out>
 auto Motor::convertPosition(const In& value, bool&& from_motor) -> Out{
-    if (from_motor) {return 360 * (static_cast<Out>(value) / (fourteen_bit_resolution)) - 1;}
+    if (from_motor) {
+        if(std::abs(value - old_encoder_value) > this -> thirteen_bit_resolution){
+            encoder_counter += (value < old_encoder_value)?1:-1;
+            encoder_counter %= 30;
+        }
+        old_encoder_value = value;
+        return (encoder_counter * 12) + (12 * (static_cast<Out>(value) / (this -> fourteen_bit_resolution - 1)));
+        }
     else return static_cast<Out>(value * 100.0 * this -> reduction_ratio); 
 }
 
